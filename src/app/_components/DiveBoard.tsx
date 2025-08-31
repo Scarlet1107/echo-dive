@@ -15,7 +15,7 @@ type Props = {
 
 const clamp = (n: number, a: number, b: number) => Math.max(a, Math.min(b, n));
 const norm = (w: number) => (clamp(Math.trunc(w), 1, 999) - 1) / 998;
-const fontFromWeight = (w: number) => 0.9 + norm(w) * (2.2 - 0.9); // rem
+const fontFromWeight = (w: number) => 1.5 + norm(w) * 3; // rem
 const freqFromWeight = (w: number, density: number) =>
     Math.max(1, Math.round((1 + Math.round(norm(w) * 5)) * density)); // 1..6 * density
 const durationFromWeight = (w: number, range: { min: number; max: number }) => {
@@ -39,7 +39,6 @@ export default function DiveBoard({
     speedRangeSec = { min: 14, max: 28 },
     className = "h-full w-screen",
 }: Props) {
-    const prefersReduced = useReducedMotion();
     const wrapRef = React.useRef<HTMLDivElement>(null);
 
     const [mounted, setMounted] = React.useState(false); // ← Hydration対策
@@ -58,7 +57,7 @@ export default function DiveBoard({
         let raf: number | null = null;
         const compute = () => {
             const h = el.clientHeight || 0;
-            const baseRow = 28; // px
+            const baseRow = 120; // px
             const n = clamp(Math.floor(h / baseRow), 3, 14) || 8;
             setTracks((p) => (p !== n ? n : p));
         };
@@ -116,9 +115,8 @@ export default function DiveBoard({
     return (
         <div
             ref={wrapRef}
-            className={`relative select-none pointer-events-none ${className}`}
+            className={`relative select-none pointer-events-none my-12 ${className}`}
             aria-hidden
-            suppressHydrationWarning // 念のため：空→有りの変化で警告を抑制
         >
             {/* SSR時は空のまま。クライアントで mounted になってから描画 */}
             {mounted &&
@@ -136,14 +134,10 @@ export default function DiveBoard({
                         }}
                         initial={{ x: 0, opacity: 0.92 }} // ← ここは0でOK（leftで開始を決める）
                         animate={
-                            prefersReduced
-                                ? { x: 0 }
-                                : { x: "-200vw" }          // ← 画面幅2個ぶん左へ抜ける（十分に左外まで）
+                            { x: "-200vw" }          // ← 画面幅2個ぶん左へ抜ける（十分に左外まで）
                         }
                         transition={
-                            prefersReduced
-                                ? { duration: 0 }
-                                : { duration: it.durationSec, ease: "linear", repeat: Infinity, delay: it.delaySec }
+                            { duration: it.durationSec, ease: "linear", repeat: Infinity, delay: it.delaySec }
                         }
                     >
                         {it.text}

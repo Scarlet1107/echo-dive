@@ -304,10 +304,10 @@ export default function Header({
             };
 
     return (
-        <header className="w-full flex items-center justify-between p-4 px-6 bg-card border-b">
+        <header className="w-full flex items-center justify-between p-6 bg-card border-b px-12">
             {/* 左：タイトル + 概要 */}
             <div className="flex items-center gap-3">
-                <h2 className="text-xl font-semibold tracking-tight text-foreground">Echo Dive</h2>
+                <h2 className="text-xl xl:text-2xl font-semibold tracking-tight text-foreground">Echo Dive</h2>
 
                 <HoverCard openDelay={100}>
                     <HoverCardTrigger asChild>
