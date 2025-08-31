@@ -26,7 +26,7 @@ export default async function Home({ searchParams }: PageProps) {
       {/* ここで全体を縦フレックスにして残りをmainへ */}
       <div className="min-h-screen flex flex-col">
         <Header initialLists={items} initialActiveListId={activeId} />
-        <main className="flex-1 w-screen p-0 m-0">
+        <main className="flex-1 w-screen p-0 m-0 overflow-x-scroll scrollbar-none">
           <DiveBoard words={words as any} />
         </main>
       </div>
